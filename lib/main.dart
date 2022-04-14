@@ -17,7 +17,7 @@ void main() {
   );
 }
 
-GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey = GlobalKey();
+GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey = GlobalKey();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      key: _scaffoldMessengerKey,
+      key: scaffoldMessengerKey!,
       debugShowCheckedModeBanner: false,
       title: 'Portfolio',
       theme: ThemeData(primarySwatch: Colors.blue, brightness: Brightness.dark),
