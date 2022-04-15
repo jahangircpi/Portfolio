@@ -7,7 +7,6 @@ class HomeItemModel {
 List<HomeItemModel> homeitems = [
   HomeItemModel(title: 'Home', onTap: () {}),
   HomeItemModel(title: 'About', onTap: () {}),
-  HomeItemModel(title: 'Services', onTap: () {}),
   HomeItemModel(title: 'Projects', onTap: () {}),
   HomeItemModel(title: 'Contacts', onTap: () {}),
 ];

@@ -1,4 +1,4 @@
-import 'package:portfolio/constants/projectassets.dart';
+import 'package:portfolio/constants/AppAssets/projectassets.dart';
 import 'dart:html' as html;
 
 class SocialMediaModel {

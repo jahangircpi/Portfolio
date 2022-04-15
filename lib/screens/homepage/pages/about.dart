@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/constants/AppAssets/projecttexts.dart';
+import 'package:portfolio/constants/externallinks.dart';
 
 import '../../../constants/functions/gap.dart';
 
@@ -19,10 +21,11 @@ class AboutScreen extends StatelessWidget {
                 children: [
                   const Text(
                     'About Me',
-                    style: TextStyle(fontSize: 40),
+                    style: TextStyle(fontSize: 30),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.01),
                     child: Container(
                       height: 2,
                       color: Colors.orange,
@@ -47,8 +50,7 @@ class AboutScreen extends StatelessWidget {
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image: NetworkImage(
-                                  "https://scontent.fdac110-1.fna.fbcdn.net/v/t1.6435-9/69283336_2382559755193903_3600516658134777856_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=qAXjqNwFDlwAX--9jCD&_nc_ht=scontent.fdac110-1.fna&oh=00_AT-FU68Cko3o_Apg6nxESG0QOhwdZ6aoMYY0Epb2gXCfGw&oe=627A939A",
-                                ),
+                                    ExternalLinksofProjects.aboutPagePicture),
                                 fit: BoxFit.cover),
                           ),
                         )),
@@ -60,7 +62,7 @@ class AboutScreen extends StatelessWidget {
                         child: SizedBox(
                           height: size.height,
                           child: const Text(
-                            "Hello World!\nI am Jahangir Alam, a Flutter Developer. I love combining the worlds of logic and creative design to make eye-catching, accessible, and user-frindly mobile applications and websites.\n\n Technology leads, society follows. The move towards increasing inclusivity and diversity in the industry through representation is of importance to me.\n\nI'm excited to make the leap and continue refining my skills with the right company.",
+                            ProjectTexts.aboutText,
                             style: TextStyle(fontSize: 20),
                           ),
                         ),

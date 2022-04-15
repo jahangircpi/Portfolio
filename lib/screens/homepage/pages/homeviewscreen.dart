@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/constants/functions/print.dart';
+import 'package:portfolio/screens/homepage/components/abouttextlists.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/functions/gap.dart';
-import '../../../constants/projectassets.dart';
+import '../../../constants/AppAssets/projectassets.dart';
 import '../../../controllers/homecontroller.dart';
-import '../../../model/socialmediamodel.dart';
 
 class HomeViewScreen extends StatelessWidget {
   const HomeViewScreen({Key? key}) : super(key: key);
@@ -21,94 +22,119 @@ class HomeViewScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(
-                flex: 2,
-                child: SizedBox(),
-              ),
               Expanded(
                 flex: 0,
+                child: SizedBox(
+                  width: size.width * 0.1,
+                ),
+              ),
+              Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     gapY(size.height * 0.2),
-                    const Text('WELCOME TO MY PORTFOLIO! 👋'),
-                    gapY(size.height * 0.03),
-                    const Text(
-                      'Jahangir',
-                      style: TextStyle(fontSize: 80),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: abouttextlists.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Text(
+                          abouttextlists[index].title!,
+                          style: TextStyle(
+                              fontSize: abouttextlists[index].fontSize!),
+                        );
+                      },
                     ),
-                    const Text(
-                      'Alam',
-                      style: TextStyle(fontSize: 80, color: Colors.white38),
-                    ),
-                    const Text('➡️ Flutter Developer'),
-                    gapY(size.height * 0.05),
-                    Row(
-                      children: List.generate(
-                        socialitems.length,
-                        (index) {
-                          return Consumer<HomeController>(
-                            builder: ((context, homecontroller, child) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        homecontroller.hoverindex == index &&
-                                                homecontroller.onhover == true
-                                            ? 15.0
-                                            : 8),
-                                child: Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: socialitems[index].onTap!,
-                                      hoverColor: Colors.transparent,
-                                      onHover: (value) {
-                                        homecontroller.gethoverboolean(
-                                            values: value,
-                                            hoverCurrentIndex: index);
-                                      },
-                                      child: Transform.translate(
-                                        offset: homecontroller.hoverindex ==
-                                                    index &&
-                                                homecontroller.onhover == true
-                                            ? const Offset(0, 0)
-                                            : const Offset(0, 0),
-                                        child: Transform.scale(
-                                          scale: homecontroller.hoverindex ==
-                                                      index &&
-                                                  homecontroller.onhover == true
-                                              ? 2
-                                              : 1,
-                                          child: Image.asset(
-                                            socialitems[index].icon!,
-                                            height: size.height * 0.06,
-                                            width: size.width * 0.03,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }),
-                          );
-                        },
-                      ),
-                    ),
+                    // gapY(size.height * 0.2),
+                    // texting(text: 'WELCOME TO MY PORTFOLIO! 👋', fontsize: 16),
+                    // gapY(size.height * 0.03),
+                    // texting(text: 'Hi,', fontsize: 80),
+                    // texting(text: "I'M Jahangir,", fontsize: 80),
+                    // texting(text: "Flutter Developer", fontsize: 80),
+
+                    // // const Text('➡️ Flutter Developer'),
+                    // gapY(size.height * 0.05),
                   ],
                 ),
               ),
               Expanded(
-                flex: 8,
-                child: Image.asset(
-                  ProjectAssets.photo,
-                  fit: BoxFit.fill,
+                flex: 0,
+                child: SizedBox(
+                  width: size.width * 0.3,
+                  height: size.height,
+                  child: Consumer<HomeController>(
+                    builder: ((context, homecontroller, child) {
+                      return MouseRegion(
+                        cursor: SystemMouseCursors.text,
+                        onEnter: (v) {
+                          // homecontroller.getTextHover(value: true);
+                          // printer(homecontroller.texthover);
+                        },
+                        onExit: (value) {
+                          // homecontroller.getTextHover(value: false);
+                          // printer(homecontroller.texthover);
+                        },
+                        onHover: (value) {
+                          //  homecontroller.getTextHover(value: value);
+                        },
+                        child: TweenAnimationBuilder(
+                            duration: const Duration(milliseconds: 300),
+                            tween: Tween<double>(
+                                begin: 1.0,
+                                end:
+                                    homecontroller.texthover == true ? 1.3 : 1),
+                            builder: (_, size, __) {
+                              return Transform.scale(
+                                scale: 1.2,
+                                child: Image.asset(
+                                  ProjectAssets.photo,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }),
+                      );
+                    }),
+                  ),
                 ),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget texting({text, fontsize}) {
+    return Consumer<HomeController>(
+      builder: ((context, homecontroller, child) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.text,
+          onEnter: (v) {
+            homecontroller.getTextHover(value: true);
+            printer(homecontroller.texthover);
+          },
+          onExit: (value) {
+            homecontroller.getTextHover(value: false);
+            printer(homecontroller.texthover);
+          },
+          onHover: (value) {
+            //  homecontroller.getTextHover(value: value);
+          },
+          child: TweenAnimationBuilder(
+              duration: const Duration(milliseconds: 300),
+              tween: Tween<double>(
+                  begin: 1.0, end: homecontroller.texthover == true ? 1.3 : 1),
+              builder: (_, size, __) {
+                return Transform.scale(
+                  scale: homecontroller.texthover == true ? 1.2 : 1,
+                  child: Text(
+                    text,
+                    style: TextStyle(fontSize: fontsize),
+                  ),
+                );
+              }),
+        );
+      }),
     );
   }
 }

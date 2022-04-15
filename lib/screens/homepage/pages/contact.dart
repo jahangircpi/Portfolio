@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants/functions/gap.dart';
+import '../../../controllers/homecontroller.dart';
 import '../../../model/socialmediamodel.dart';
 
 class ContactScreen extends StatelessWidget {
@@ -132,31 +134,60 @@ class ContactScreen extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),
-            // gapY(size.height * 0.01),
+            gapY(size.height * 0.01),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 socialitems.length,
                 (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 18.0),
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: socialitems[index].onTap!,
-                          child: Container(
-                            height: size.height * 0.06,
-                            width: size.width * 0.03,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: AssetImage(socialitems[index].icon!),
+                  return Consumer<HomeController>(
+                    builder: ((context, homecontroller, child) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: homecontroller
+                                            .hoverindexforsocialitems ==
+                                        index &&
+                                    homecontroller.onhoverforsocialitems == true
+                                ? 18.0
+                                : 8),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: socialitems[index].onTap!,
+                              hoverColor: Colors.transparent,
+                              onHover: (value) {
+                                homecontroller.gethoverbooleanforsocial(
+                                    values: value, hoverCurrentIndex: index);
+                              },
+                              child: Transform.translate(
+                                offset: homecontroller
+                                                .hoverindexforsocialitems ==
+                                            index &&
+                                        homecontroller.onhoverforsocialitems ==
+                                            true
+                                    ? const Offset(0, 0)
+                                    : const Offset(0, 0),
+                                child: Transform.scale(
+                                  scale:
+                                      homecontroller.hoverindexforsocialitems ==
+                                                  index &&
+                                              homecontroller
+                                                      .onhoverforsocialitems ==
+                                                  true
+                                          ? 1.5
+                                          : 1,
+                                  child: Image.asset(
+                                    socialitems[index].icon!,
+                                    height: size.height * 0.05,
+                                    width: size.width * 0.028,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
+                            )
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    }),
                   );
                 },
               ),
