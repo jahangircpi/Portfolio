@@ -1,5 +1,13 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
+import 'package:portfolio/constants/AppAssets/projectcolors.dart';
+import 'package:portfolio/constants/functions/gap.dart';
+import 'package:portfolio/constants/functions/print.dart';
+import 'package:portfolio/controllers/projectcontroller.dart';
+import 'package:provider/provider.dart';
+
+import '../../../constants/enums.dart';
 import '../components/projectlists.dart';
 
 class ProjectScreen extends StatelessWidget {
@@ -7,102 +15,158 @@ class ProjectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: ourapplists.length,
-      shrinkWrap: true,
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-      itemBuilder: (BuildContext context, int index) {
-        var ourapps = ourapplists[index];
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: PhysicalModel(
-            color: Colors.white.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
-            elevation: 10,
-            child: Container(
-              height: 250,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 0,
-                    child: SizedBox(
-                      width: 80,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 12),
-                            child: Image.asset(ourapps.image!),
-                          ),
-                        ],
-                      ),
-                    ),
+    Size size = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: size.width * 0.2,
+      ),
+      child: ChangeNotifierProvider<ProjectContraoller>(
+        create: (_) => ProjectContraoller(),
+        child: Consumer<ProjectContraoller>(
+          builder: ((context, projectcontroller, child) {
+            return Column(
+              children: [
+                const Text(
+                  "My Projects",
+                  style: TextStyle(fontSize: 20),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+                  child: Container(
+                    height: size.height * 0.002,
+                    width: size.width * 0.2,
+                    color: Colors.orange,
                   ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15.0, vertical: 12),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                ourapps.title!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 20),
+                ),
+                GridView.builder(
+                  itemCount: projectcontroller.totalSize,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          MediaQuery.of(context).size.width < 1100 ? 1 : 3),
+                  itemBuilder: (BuildContext context, int index) {
+                    var ourapps = ourapplists[index];
+                    return InkWell(
+                      onTap: () {},
+                      onHover: (value) {
+                        projectcontroller.gethoverbooleancategory(
+                            values: value, hoverCurrentIndex: index);
+                      },
+                      child: TweenAnimationBuilder(
+                        duration: const Duration(milliseconds: 300),
+                        tween: Tween<double>(begin: 0, end: 1),
+                        builder: (context, value, child) {
+                          return Transform.scale(
+                            scale: projectcontroller.onhover == true &&
+                                    projectcontroller.hoverIndex == index
+                                ? 1.1
+                                : 1,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: projectcontroller.onhover == true &&
+                                        projectcontroller.hoverIndex == index
+                                    ? size.height * 0.03
+                                    : size.height * 0.01,
+                                vertical: size.width * 0.03,
                               ),
-                            ),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                physics: const NeverScrollableScrollPhysics(),
-                                child: Text(ourapps.description!,
-                                    style: const TextStyle(color: Colors.white),
-                                    textAlign: TextAlign.justify),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 0,
-                              child: InkWell(
-                                onTap: () {
-                                  // printer(lists.downloadLink);
-                                },
-                                child: Container(
-                                  height: 50,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(4.0),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'DownLoad Now',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF112240),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: size.width * 0.015,
+                                      vertical: size.height * 0.005),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: size.height * 0.04,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Image.asset(ourapps.image!),
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                    Icons.exit_to_app))
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: size.height * 0.02),
+                                        child: Text(
+                                          ourapps.title!,
+                                          style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                          .size
+                                                          .width <
+                                                      1100
+                                                  ? 20
+                                                  : 20,
+                                              color:
+                                                  projectcontroller.onhover ==
+                                                              true &&
+                                                          projectcontroller
+                                                                  .hoverIndex ==
+                                                              index
+                                                      ? ProjectColors.hoverColor
+                                                      : Colors.white),
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Text(ourapps.description!),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            )
-                          ],
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 500,
+                          width: 50,
+                          color: Colors.redAccent,
                         ),
                       ),
+                    );
+                  },
+                ),
+                gapY(size.height * 0.009),
+                InkWell(
+                  onTap: () {
+                    projectcontroller.updatethelists();
+                  },
+                  hoverColor: ProjectColors.hoverColor.withOpacity(0.2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: ProjectColors.hoverColor),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.015,
+                          vertical: size.height * 0.015),
+                      child: Text(
+                        projectcontroller.showMore == false
+                            ? 'Show More'
+                            : "Hide Some",
+                        style: const TextStyle(color: ProjectColors.hoverColor),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }),
+        ),
+      ),
     );
   }
 }
