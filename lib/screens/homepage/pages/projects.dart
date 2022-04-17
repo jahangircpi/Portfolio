@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:portfolio/constants/AppAssets/projectcolors.dart';
 import 'package:portfolio/constants/functions/gap.dart';
-import 'package:portfolio/constants/functions/print.dart';
 import 'package:portfolio/controllers/projectcontroller.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants/enums.dart';
 import '../components/projectlists.dart';
 
 class ProjectScreen extends StatelessWidget {

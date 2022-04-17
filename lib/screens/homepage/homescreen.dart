@@ -187,11 +187,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Consumer<HomeController>(
                       builder: ((context, homecontroller, child) {
                         return ScrollablePositionedList.builder(
-                          itemCount: 1,
+                          itemCount: homewidgetlistsdesktop.length,
                           itemScrollController: itemScrollController,
                           itemPositionsListener: itemPositionsListener,
                           itemBuilder: (context, index) {
-                            return homewidgetlistsdesktop[2].widget!;
+                            return homewidgetlistsdesktop[index].widget!;
                           },
                         );
                       }),
