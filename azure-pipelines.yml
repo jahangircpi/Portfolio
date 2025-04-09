@@ -1,0 +1,44 @@
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+      - main
+
+# Solution: Use the classic agent pool with no parallelism requirements
+pool:
+  name: Azure Pipelines
+  vmImage: 'ubuntu-20.04'
+
+steps:
+  # 1. Install basic dependencies
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y curl unzip git libglu1-mesa
+    displayName: 'Install System Dependencies'
+
+  # 2. Install Flutter (faster method)
+  - script: |
+      FLUTTER_VERSION="3.19.5"
+      curl -L https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz | tar -xJ
+      echo "$(pwd)/flutter/bin" >> $PATH
+    displayName: 'Install Flutter'
+
+  # 3. Verify installation
+  - script: flutter --version
+    displayName: 'Check Flutter Version'
+
+  # 4. Get dependencies
+  - script: flutter pub get
+    displayName: 'Get Packages'
+
+  # 5. Build APK (with timestamp-based build number)
+  - script: |
+      BUILD_NUMBER=$(date +%Y%m%d%H%M)
+      flutter build apk --release --build-number=$BUILD_NUMBER
+    displayName: 'Build Release APK'
+
+  # 6. Publish single APK file
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: 'build/app/outputs/flutter-apk/app-release.apk'
+      artifactName: 'apk'
