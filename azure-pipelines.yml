@@ -1,19 +1,30 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# azure-pipelines.yml (updated)
 trigger:
-- main
+  branches:
+    include:
+      - main
 
+# Key change: Use 'vmImage: ubuntu-20.04' (no parallelism needed)
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-20.04'
+  demands: npm  # Ensures Node.js is available (for Flutter)
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y curl unzip
+      curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.5-stable.tar.xz
+      tar xf flutter_linux_3.19.5-stable.tar.xz
+      echo "$(pwd)/flutter/bin" >> $GITHUB_PATH
+    displayName: 'Install Flutter'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - script: flutter pub get
+    displayName: 'Get Dependencies'
+
+  - script: flutter build apk --release
+    displayName: 'Build APK'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: 'build/app/outputs/flutter-apk/'
+      artifactName: 'apk'
